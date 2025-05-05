@@ -1,4 +1,4 @@
-import workpapersAPI from "../sdk/workpapersAPI.ts";
+import workpapersAPI from "../sdk/workpapersAPI.js";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -30,7 +30,7 @@ export const getMockProducts = async (req, res) => {
         search: req.query.search,      // e.g. ?search=Template
         };
     
-        const data = await workpapersAPI.getContent(firmId, filters);
+        const data = await workpapersAPI.getMockContent();
         res.status(200).json(data);
     } catch (err) {
         res.status(500).json({ message: err.message });
