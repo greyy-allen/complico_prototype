@@ -1,7 +1,7 @@
 // -------------------- imports --------------------
 import type { Request, Response } from "express";
-import dotenv   from "dotenv";
-import workpapersAPI from "../sdk/workpapersAPI.js";   // controller compiles to JS at build time
+import dotenv from "dotenv";
+import workpapersAPI from "../sdk/workpapersAPI.js";
 
 dotenv.config();
 
@@ -13,13 +13,12 @@ export const getProducts = async (
     const apiUrl = process.env.API_ENDPOINT;
     if (!apiUrl) throw new Error("Missing API_ENDPOINT env var");
 
-    // Node ≥18 has global fetch; otherwise import 'node-fetch'
     const response = await fetch(apiUrl);
 
     if (!response.ok)
       throw new Error(`HTTP error! status: ${response.status}`);
 
-    const data = (await response.json()) as unknown; // refine type if you know the shape
+    const data = (await response.json()) as unknown; 
     res.status(200).json(data);
   } catch (error) {
     res.status(500).json({ message: (error as Error).message });
