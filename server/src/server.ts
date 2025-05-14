@@ -13,6 +13,7 @@ import productRoutes from "./routes/productRoutes";
 import firmRoutes from "./routes/firmRoutes";
 import workpaperRoutes from "./routes/workpaperRoutes";
 import userRoutes from "./routes/userRoutes";
+import subscriptionRoutes from "./routes/subscriptionRoutes";
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/firms", firmRoutes);
 app.use("/api/workpapers", workpaperRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/subscriptions", subscriptionRoutes);
 
 async function initDB(): Promise<void> {
     try {
