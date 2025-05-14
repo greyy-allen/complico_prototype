@@ -19,7 +19,7 @@ type User = {
   lastName: string;
   email: string;
 };
-type Region = //########################################################################################MIGHT NOT NEED TO IMPLEMENT
+type Region =
   | "australia"
   | "newZealand"
   | "unitedKingdom"
@@ -77,7 +77,7 @@ class WorkpapersAPI {
   // Example of the "API" request to subscribe a firm to a piece of content
   subscribeToContent(
     firmId: string,
-    subscriberId: string,
+    subscriberId: string, // userid
     contentId: string
   ): Promise<void> {
     // Send req to api to subscribe to content
