@@ -9,7 +9,10 @@ import "./models/User.js";
 import "./models/Review.js";
 
 import pool from "./config/db.js";
-import productRoutes from "./routes/productRoutes.js";
+import productRoutes from "./routes/productRoutes";
+import firmRoutes from "./routes/firmRoutes";
+import workpaperRoutes from "./routes/workpaperRoutes";
+import userRoutes from "./routes/userRoutes";
 
 dotenv.config();
 
@@ -24,42 +27,9 @@ app.use(helmet()); //middleware security, helps protect app by adding various ht
 app.use(morgan("dev")); //request logger
 
 app.use("/api/products", productRoutes);
-
-// async function initDB() {
-//     try {
-//         const createUsersTable = await pool.query(
-//             `
-//             CREATE TABLE IF NOT EXISTS Users (
-//                 user_id    SERIAL PRIMARY KEY,
-//                 username   VARCHAR(50) NOT NULL,
-//                 email      VARCHAR(100) NOT NULL UNIQUE,
-//                 password   VARCHAR(255) NOT NULL,
-//                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-//             );
-//             `
-//         )
-
-//         const createReviewsTable = await pool.query(
-//             `
-//             CREATE TABLE IF NOT EXISTS Reviews (
-//             review_id     INT           GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-//             user_id       INT           NOT NULL, 
-//             product_id    INT           NOT NULL,
-//             rating        INT           NOT NULL CHECK (rating BETWEEN 1 AND 5),
-//             comment       TEXT,
-//             created_at    TIMESTAMP     DEFAULT CURRENT_TIMESTAMP,
-//             CONSTRAINT fk_user
-//             FOREIGN KEY (user_id)
-//             REFERENCES Users (user_id)
-//             );
-//             `
-//         )
-
-//         console.log("Database initialized")
-//     } catch (error) {
-//         console.log("Error initDB", error);
-//     }
-// }
+app.use("/api/firms", firmRoutes);
+app.use("/api/workpapers", workpaperRoutes);
+app.use("/api/users", userRoutes);
 
 async function initDB(): Promise<void> {
     try {

@@ -1,0 +1,18 @@
+import type { Request, Response } from "express";
+import dotenv from "dotenv";
+import User from "../models/User.js";
+
+dotenv.config();
+
+export const getUsers = async (
+  _req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const users = await User.findAll();
+    res.status(200).json(users);
+  } catch (error: any) {
+    console.error("Error fetching userss", error.message);
+    res.status(500).json({ error: error.message });
+  }
+}

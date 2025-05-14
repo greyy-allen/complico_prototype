@@ -6,7 +6,6 @@ import {
 } from 'sequelize';
 import sequelize from '../config/sequelize.js';
 
-/** Firm entity */
 class Firm extends Model<
   InferAttributes<Firm>,
   InferCreationAttributes<Firm>
@@ -29,7 +28,9 @@ Firm.init(
   {
     sequelize,
     tableName: 'firms',
-    timestamps: true
+    timestamps: true,
+    createdAt: 'createdAt',
+    updatedAt: false
   }
 );
 
