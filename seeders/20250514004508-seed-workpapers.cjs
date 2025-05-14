@@ -4,14 +4,26 @@ const { v4: uuidv4 } = require('uuid');
 /* @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface) {
+    const [users] = await queryInterface.sequelize.query(`
+      SELECT "userId", "email"
+      FROM "users"
+    `);
+
+    const shelby = users.find(u => u.email === 'shelbythomas@shelby.com');
+    const bruce = users.find(u => u.email === 'manisbat@jusleague.com');
+
+    if (!shelby || !bruce) {
+      throw new Error('Required users not found. Run user seeder first.');
+    }
+
     await queryInterface.bulkInsert('workpapers', [
       {
         workpaperId: uuidv4(),
         createdAt: new Date(),
         updatedAt: new Date(),
-        createdBy: 1,
+        createdBy: shelby.userId,
         publishedAt: new Date(),
-        publishedBy: 1,
+        publishedBy: shelby.userId,
         region: ['australia'],
         name: 'BAS 2025 Q1',
         description: 'Quarterly BAS workpaper template',
@@ -23,9 +35,9 @@ module.exports = {
         workpaperId: uuidv4(),
         createdAt: new Date(),
         updatedAt: new Date(),
-        createdBy: 2,           // Bob
+        createdBy: bruce.userId,
         publishedAt: new Date(),
-        publishedBy: 2,
+        publishedBy: bruce.userId,
         region: ['newZealand'],
         name: 'FBT 2025',
         description: 'Fringe benefits tax workpaper',
@@ -37,7 +49,7 @@ module.exports = {
         workpaperId: uuidv4(),
         createdAt: new Date(),
         updatedAt: new Date(),
-        createdBy: 1,
+        createdBy: shelby.userId,
         region: ['australia', 'unitedKingdom'],
         name: 'Compliance – Year End 2024',
         description: 'General year-end compliance checklist.',
@@ -49,12 +61,6 @@ module.exports = {
   },
 
   async down (queryInterface) {
-    await queryInterface.bulkDelete('workpapers', {
-      name: [
-        'BAS 2025 Q1',
-        'FBT 2025',
-        'Compliance - Year End 2024'
-      ]
-    });
+    await queryInterface.bulkDelete('workpapers', null, {});
   }
 };

@@ -3,6 +3,10 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
+    await queryInterface.sequelize.query(
+      'CREATE EXTENSION IF NOT EXISTS "pgcrypto";'
+    );
+    
     await queryInterface.createTable('workpapers', {
       workpaperId: {
         type: Sequelize.UUID,
@@ -21,18 +25,21 @@ module.exports = {
         allowNull: false,
         defaultValue: Sequelize.fn('NOW'),
       },
+
       createdBy: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         allowNull: false,
         references: { model: 'users', key: 'userId' },
         onUpdate: 'CASCADE',
         onDelete: 'RESTRICT',
       },
+
       publishedAt: {
         type: Sequelize.DATE,
       },
+
       publishedBy: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         references: { model: 'users', key: 'userId' },
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
@@ -57,7 +64,7 @@ module.exports = {
       },
       entityType: {
         type: Sequelize.ARRAY(Sequelize.STRING),
-      }
+      },
     });
   },
 
