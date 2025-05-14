@@ -14,11 +14,15 @@ class Firm extends Model<
 Firm.init(
   {
     firmId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
-      autoIncrement: true,
     },
-
+    shortId: {
+      type: DataTypes.STRING(8),
+      allowNull: false,
+      unique: true,
+    },
     name: {
       type: DataTypes.STRING(100),
       allowNull: false,
