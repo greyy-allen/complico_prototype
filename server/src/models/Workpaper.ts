@@ -3,6 +3,8 @@ import {
   Model,
   InferAttributes,
   InferCreationAttributes,
+  CreationOptional,
+  ForeignKey
 } from 'sequelize';
 import sequelize from '../config/sequelize.js';
 import User from './User.js';
@@ -25,7 +27,23 @@ const ALLOWED_ENTITY = [
 class Workpaper extends Model<
   InferAttributes<Workpaper>,
   InferCreationAttributes<Workpaper>
-> {}
+> {
+  declare workpaperId: CreationOptional<string>;
+  declare createdAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
+  declare publishedAt: CreationOptional<Date | null>;
+
+  declare createdBy: ForeignKey<User['userId']>;
+  declare publishedBy: ForeignKey<User['userId']> | null;
+
+  declare region: string[];
+  declare name: string;
+  declare description: string | null;
+  declare tags: string[] | null;
+
+  declare workpaperType: string[] | null;
+  declare entityType: string[] | null;
+}
 
 Workpaper.init(
   {
@@ -98,6 +116,7 @@ Workpaper.init(
 
 Workpaper.belongsTo(User, { as: 'creator',   foreignKey: 'createdBy'   });
 Workpaper.belongsTo(User, { as: 'publisher', foreignKey: 'publishedBy' });
+
 User.hasMany(Workpaper,   { foreignKey: 'createdBy',   as: 'createdWorkpapers'  });
 User.hasMany(Workpaper,   { foreignKey: 'publishedBy', as: 'publishedWorkpapers' });
 
