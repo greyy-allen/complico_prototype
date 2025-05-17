@@ -24,6 +24,13 @@ const ALLOWED_ENTITY = [
   'trust',
 ] as const;
 
+const ALLOWED_REGIONS = [
+  'australia',
+  'newZealand',
+  'unitedKingdom',
+  'republicOfIreland',
+] as const;
+
 class Workpaper extends Model<
   InferAttributes<Workpaper>,
   InferCreationAttributes<Workpaper>
@@ -63,7 +70,25 @@ Workpaper.init(
     region: {
       type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: false,
+      validate: {
+        isRegionArray(value: unknown) {
+          if (!value) return;
+          const list = value as string[];
+          for (const v of list) {
+            if (typeof v !== 'string') {
+              throw new Error(`Region must be a string: ${v}`);
+            }
+            // Optional: warn if it's not from the allowed list
+            if (
+              !ALLOWED_REGIONS.includes(v as any)
+            ) {
+              console.warn(`Non-standard region detected: ${v}`);
+            }
+          }
+        },
+      },
     },
+    
     name: {
       type: DataTypes.STRING(150),
       allowNull: false,
