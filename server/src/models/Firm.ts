@@ -3,13 +3,19 @@ import {
   Model,
   InferAttributes,
   InferCreationAttributes,
+  CreationOptional
 } from 'sequelize';
 import sequelize from '../config/sequelize.js';
 
 class Firm extends Model<
   InferAttributes<Firm>,
   InferCreationAttributes<Firm>
-> {}
+> {
+  declare firmId: CreationOptional<string>;
+  declare shortId: string;
+  declare name: string;
+  declare createdAt: CreationOptional<Date>;
+}
 
 Firm.init(
   {
@@ -28,6 +34,11 @@ Firm.init(
       allowNull: false,
       unique: true,
     },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    }
   },
   {
     sequelize,
