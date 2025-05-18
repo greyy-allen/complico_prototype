@@ -45,7 +45,7 @@ export default function Header({ className }: Props) {
           <Text className="text-sm font-medium">Start&nbsp;Trial</Text>
         </Link>
 
-        <Link href="#">
+        <Link href="/choose-role">
           <Text className="text-sm font-medium">Login</Text>
         </Link>
 
