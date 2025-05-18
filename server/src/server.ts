@@ -14,7 +14,7 @@ import sequelize from "./config/sequelize.js";
 import "./models/User.js";
 import "./models/Review.js";
 
-import pool from "./config/db.js";
+// import pool from "./config/db.js";
 import productRoutes from "./routes/productRoutes";
 import firmRoutes from "./routes/firmRoutes";
 import workpaperRoutes from "./routes/workpaperRoutes";

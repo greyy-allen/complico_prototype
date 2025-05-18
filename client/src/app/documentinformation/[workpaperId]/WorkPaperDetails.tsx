@@ -1,7 +1,46 @@
 import { Text, Heading, Separator } from "@/components/ui";
-import React from "react";
+import React, { useEffect, useState, Suspense } from "react";
+import { useParams } from "next/navigation";
 
-export default function DocumentinformationGroup3353() {
+import dotenv from "dotenv";
+
+dotenv.config();
+const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL || 3000;
+
+type Workpaper = {
+  workpaperId: string;
+  name: string;
+  description: string;
+  region: string[];
+  tags: string[];
+  workpaperType: string[];
+  entityType: string[];
+};
+
+export default function WorkPaperDetails() {
+  const { workpaperId } = useParams();
+  const [workpaper, setWorkpaper] = useState<Workpaper | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchWorkpaper = async () => {
+      try {
+        const response = await fetch(NEXT_PUBLIC_API_URL + `/workpapers/${workpaperId}`)
+        const result = await response.json();
+        setWorkpaper(result);
+      } catch (error) {
+        console.error("Failed to fetch workpaper", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (workpaperId) fetchWorkpaper();
+  }, [workpaperId]);
+
+  if (loading) return <div>Loading...</div>;
+  if (!workpaper) return <div>No workpaper found.</div>;
+
   return (
     <div className="flex flex-1 flex-col items-start self-center md:self-stretch md:px-5">
       <div className="flex items-start self-stretch sm:flex-col">
@@ -19,19 +58,7 @@ export default function DocumentinformationGroup3353() {
         Description
       </Heading>
       <Text as="p" className="mt-3.5 w-full text-[14px] font-normal leading-4">
-        XX XX XXXXXXX XXXXXXXXX X XX XXXXX XXXXXXXXXX XX X X XXXXXXXXXXX XXX XX X XXXXXXXXXXXXXX X XXXXX X X XXX XXX XXX
-        XX XXX X XXXXX XXX XXXXXXXXXXXXXXX XX XXXXXXX XXXXXXXXX X XX XXXXX XXXXXXXXXX XX X X XXXXXXXXXXX XXX XX X
-        XXXXXXXXXXXXXX X XXXXX X X XXX XXX XXX XX XXX X XXXXX XXX XXXXXXXXXXXXX XX XX XXXXXXX XXXXXXXXX X XX XXXXX
-        XXXXXXXXXX XX X X XXXXXXXXXXX XXX XX X XXXXXXXXXXXXXX X XXXXX X X XXX XXX XXX XX XXX X XXXXX XXX XXXXXXXXXXXXX
-        XX XXXXX XXXXXXXXXX XX X X XXXXXXXXXXX XXX XX X XXXXXXXXXXXXXX X XXXXX X X XXX XXX XXX XX XXX X XXXXX XXX
-        XXXXXXXXXXXXX XX XX XXXXXXX XXXXXXXXX X XX XXXXX XXXXXXXXXX XX X X XXXXXXXXXXX XXX XX X XXXXXXXXXXXXXX X XXXXX X
-        X XXX XXX XXX XX XXX X XXXXX XXX XXXXXXXXXXXXX XXXX XXX XX X XXXXXXXXXXXXXX X XXXXX X X XXX XXX XXX XX XXX X
-        XXXXX XXX XXXXXXXXXXXXX XX XXXXX XXXXXXXXXX XX X X XXXXXXXXXXX XXX XX X XXXXXXXXXXXXXX X XXXXX X X XXX XXX XXX
-        XX XXX X XXXXX XXX XXXXXXXXXXXXX XX XX XXXXXXX XXXXXXXXX X XX XXXXX XXXXXXXXXX XX X X XXXXXXXXXXX XXX XX X
-        XXXXXXXXXXXXXX X XXXXX X X XXX XXX XXX XX XXX X XXXXX XXX XXXXXXXXXXXXX XXXX XXX XX X XXXXXXXXXXXXXX X XXXXX X X
-        XXX XXX XXX XX XXX X XXXXX XXX XXXXXXXXXXXXX XX XXXXX XXXXXXXXXX XX X X XXXXXXXXXXX XXX XX X XXXXXXXXXXXXXX X
-        XXXXX X X XXX XXX XXX XX XXX X XXXXX XXX XXXXXXXXXXXXX XX XX XXXXXXX XXXXXXXXX X XX XXXXX XXXXXXXXXX XX X X
-        XXXXXXXXXXX XXX XX X XXXXXXXXXXXXXX X XXXXX X X XXX XXX XXX XX XXX X XXXXX XXX XXXXXXXXXXXXX
+        {workpaper.description}
       </Text>
       <Heading size="heading5xl" as="h5" className="ml-1.5 mt-[58px] text-[24px] font-bold md:ml-0 md:text-[22px]">
         How to use

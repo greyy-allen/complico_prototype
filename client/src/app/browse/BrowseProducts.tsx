@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useEffect, useState, Suspense } from "react";
+import React, { useEffect, useState, Suspense, useRef } from "react";
 import ProductDetails from "../../components/ProductDetails";
 import { Heading } from "@/components/ui";
+import Link from "next/link";
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -22,7 +23,16 @@ type Workpaper = {
 
 export default function BrowseProducts() {
   const [data, setData] = useState<Workpaper[]>([]);
+  const [dataSP, setDataSP] = useState<Workpaper[]>([]);
+  const [dataE, setDataE] = useState<Workpaper[]>([]);
+
   const [loading, setLoading] = useState(true);
+
+  const [startIndex, setStartIndex] = useState(0);
+  const [startIndexSP, setStartIndexSP] = useState(0);
+  const [startIndexE, setStartIndexE] = useState(0);
+
+  const visibleCount = 4;
 
   useEffect(() => {
     const fetchWorkpapers = async () => {
@@ -30,6 +40,8 @@ export default function BrowseProducts() {
         const response = await fetch(NEXT_PUBLIC_API_URL + "/workpapers");
         const result = await response.json();
         setData(result);
+        setDataSP(result);
+        setDataE(result);
       } catch (error) {
         console.error("Failed to fetch workpapers:", error);
       } finally {
@@ -40,17 +52,57 @@ export default function BrowseProducts() {
     fetchWorkpapers();
   }, []);
 
+  const scroll = (direction: 'left' | 'right') => {
+    if (direction === 'left') {
+      setStartIndex((prev) => Math.max(prev - 1, 0));
+    } else if (direction === 'right') {
+      setStartIndex((prev) =>
+        prev + visibleCount < data.length ? prev + 1 : prev
+      );
+    }
+  };
+
+  const scrollSP = (direction: 'left' | 'right') => {
+    if (direction === 'left') {
+      setStartIndexSP((prevSP) => Math.max(prevSP - 1, 0));
+    } else if (direction === 'right') {
+      setStartIndexSP((prevSP) =>
+        prevSP + visibleCount < dataSP.length ? prevSP + 1 : prevSP
+      );
+    }
+  };
+
+  const scrollE = (direction: 'left' | 'right') => {
+    if (direction === 'left') {
+      setStartIndexE((prev) => Math.max(prev - 1, 0));
+    } else if (direction === 'right') {
+      setStartIndexE((prev) =>
+        prev + visibleCount < dataE.length ? prev + 1 : prev
+      );
+    }
+  };
+
+  const visibleData = data.slice(startIndex, startIndex + visibleCount);
+  const visibleDataSP = dataSP.slice(startIndexSP, startIndexSP + visibleCount);
+  const visibleDataE = dataE.slice(startIndexE, startIndexE + visibleCount);
+
   return (
     <div className="flex w-[78%] flex-col items-start gap-5 self-center md:w-full md:px-5">
-      <Heading size="heading7xl" as="h3" className="text-[32px] font-bold md:text-[30px] sm:text-[28px]">
+      {/* <Heading size="heading7xl" as="h3" className="text-[32px] font-bold md:text-[30px] sm:text-[28px]">
         Workpaper Templates
       </Heading>
-      <div className="grid grid-cols-3 gap-[30px] self-stretch md:grid-cols-2 sm:grid-cols-1">
+
+      <div className="grid grid-cols-4 gap-[30px] self-stretch md:grid-cols-3 sm:grid-cols-2">
         <Suspense fallback={<div>Loading feed...</div>}>
           {loading ? (
             <div>Loading...</div>
           ) : (
             data.map((workpaper, index) => (
+              <Link
+                key={workpaper.workpaperId}
+                href={`/documentinformation/${workpaper.workpaperId}`}
+                passHref
+              >
               <ProductDetails
                 key={workpaper.workpaperId}
                 arrowLeftImage="img_arrow_left.svg"
@@ -69,10 +121,189 @@ export default function BrowseProducts() {
                 productRating="N/A"
                 productReviews="N/A"
               />
+              </Link>
+            ))
+          )}
+        </Suspense>
+      </div> */}
+
+{/* =======================RECENTLY ADDED==================================== */}
+      <div className="flex justify-between w-full">
+        <Heading
+          size="heading7xl"
+          as="h3"
+          className="text-[32px] font-bold md:text-[30px] sm:text-[28px]"
+        >
+          Recently Added
+        </Heading>
+        <div className="flex gap-2">
+          <button
+            onClick={() => scroll("left")}
+            className="rounded-full border border-black px-3 py-1 hover:bg-gray-100"
+          >
+            ←
+          </button>
+          <button
+            onClick={() => scroll("right")}
+            className="rounded-full border border-black px-3 py-1 hover:bg-gray-100"
+          >
+            →
+          </button>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-4 gap-[30px] self-stretch md:grid-cols-3 sm:grid-cols-2">
+        <Suspense fallback={<div>Loading feed...</div>}>
+          {loading ? (
+            <div>Loading...</div>
+          ) : (
+            visibleData.map((workpaper) => (
+              <Link
+                key={workpaper.workpaperId}
+                href={`/documentinformation/${workpaper.workpaperId}`}
+                passHref
+              >
+                <ProductDetails
+                  arrowLeftImage="img_arrow_left.svg"
+                  productName={workpaper.name}
+                  productDescription={
+                    <>
+                      {workpaper.description}
+                      <br />
+                      <strong>Region:</strong> {workpaper.region.join(", ")}
+                      <br />
+                      <strong>Entity:</strong> {workpaper.entityType.join(", ")}
+                      <br />
+                      <strong>Tags:</strong> {workpaper.tags.join(", ")}
+                    </>
+                  }
+                  productRating="N/A"
+                  productReviews="N/A"
+                />
+              </Link>
             ))
           )}
         </Suspense>
       </div>
+
+{/* =======================Staff's Pick==================================== */}
+      <div className="flex justify-between w-full">
+        <Heading
+          size="heading7xl"
+          as="h3"
+          className="text-[32px] font-bold md:text-[30px] sm:text-[28px]"
+        >
+          Staff's Pick
+        </Heading>
+        <div className="flex gap-2">
+          <button
+            onClick={() => scrollSP("left")}
+            className="rounded-full border border-black px-3 py-1 hover:bg-gray-100"
+          >
+            ←
+          </button>
+          <button
+            onClick={() => scrollSP("right")}
+            className="rounded-full border border-black px-3 py-1 hover:bg-gray-100"
+          >
+            →
+          </button>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-4 gap-[30px] self-stretch md:grid-cols-3 sm:grid-cols-2">
+        <Suspense fallback={<div>Loading feed...</div>}>
+          {loading ? (
+            <div>Loading...</div>
+          ) : (
+            visibleDataSP.map((workpaperSP) => (
+              <Link
+                key={workpaperSP.workpaperId}
+                href={`/documentinformation/${workpaperSP.workpaperId}`}
+                passHref
+              >
+                <ProductDetails
+                  arrowLeftImage="img_arrow_left.svg"
+                  productName={workpaperSP.name}
+                  productDescription={
+                    <>
+                      {workpaperSP.description}
+                      <br />
+                      <strong>Region:</strong> {workpaperSP.region.join(", ")}
+                      <br />
+                      <strong>Entity:</strong> {workpaperSP.entityType.join(", ")}
+                      <br />
+                      <strong>Tags:</strong> {workpaperSP.tags.join(", ")}
+                    </>
+                  }
+                  productRating="N/A"
+                  productReviews="N/A"
+                />
+              </Link>
+            ))
+          )}
+        </Suspense>
+      </div>
+
+{/* =======================Explore==================================== */}
+      <div className="flex justify-between w-full">
+        <Heading
+          size="heading7xl"
+          as="h3"
+          className="text-[32px] font-bold md:text-[30px] sm:text-[28px]"
+        >
+          Explore
+        </Heading>
+        <div className="flex gap-2">
+          <button
+            onClick={() => scrollE("left")}
+            className="rounded-full border border-black px-3 py-1 hover:bg-gray-100"
+          >
+            ←
+          </button>
+          <button
+            onClick={() => scrollE("right")}
+            className="rounded-full border border-black px-3 py-1 hover:bg-gray-100"
+          >
+            →
+          </button>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-4 gap-[30px] self-stretch md:grid-cols-3 sm:grid-cols-2">
+        <Suspense fallback={<div>Loading feed...</div>}>
+          {loading ? (
+            <div>Loading...</div>
+          ) : (
+            visibleDataE.map((workpaperE) => (
+              <Link
+                key={workpaperE.workpaperId}
+                href={`/documentinformation/${workpaperE.workpaperId}`}
+                passHref
+              >
+                <ProductDetails
+                  arrowLeftImage="img_arrow_left.svg"
+                  productName={workpaperE.name}
+                  productDescription={
+                    <>
+                      {workpaperE.description}
+                      <br />
+                      <strong>Region:</strong> {workpaperE.region.join(", ")}
+                      <br />
+                      <strong>Entity:</strong> {workpaperE.entityType.join(", ")}
+                      <br />
+                      <strong>Tags:</strong> {workpaperE.tags.join(", ")}
+                    </>
+                  }
+                  productRating="N/A"
+                  productReviews="N/A"
+                />
+              </Link>
+            ))
+          )}
+        </Suspense>
+      </div>
+
     </div>
   );
 }
