@@ -6,10 +6,6 @@ import BrowseProducts from "./BrowseProducts";
 import { Heading } from "@/components/ui";
 import React from "react";
 
-import dotenv from "dotenv";
-dotenv.config();
-
-
 export default function BrowseContentPage() {
   return (
     <div className="w-full bg-white-a700">

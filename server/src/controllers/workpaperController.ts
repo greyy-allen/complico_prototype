@@ -19,4 +19,25 @@ export const getWorkpapers = async (
     console.error("Error fetching workpapers", error.message);
     res.status(500).json({ error: error.message });
   }
-}
+};
+
+export const getWorkpaper = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { workpaperId } = req.params;
+
+    const workpaper = await Workpaper.findByPk(workpaperId);
+
+    if (!workpaper) {
+      res.status(404).json({ error: "Workpaper not found"});
+      return;
+    };
+
+    res.status(200).json(workpaper);
+  } catch (error:any) {
+    console.error("Error fetching workpaper by ID", error.message);
+    res.status(500).json({ error: error.message });
+  }
+};
