@@ -31,6 +31,11 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
+      type: {
+        type: Sequelize.ENUM('vendor', 'customer'),
+        allowNull: false,
+        defaultValue: 'customer'
+      },
       password: {
         type: Sequelize.STRING(255),
         allowNull: false,

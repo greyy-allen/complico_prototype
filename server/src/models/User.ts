@@ -1,5 +1,12 @@
 import sequelize from "../config/sequelize.js";
-import { DataTypes, Model, InferAttributes, InferCreationAttributes } from "sequelize";
+import {
+  DataTypes,
+  Model,
+  InferAttributes,
+  InferCreationAttributes,
+  CreationOptional,
+  ForeignKey
+} from 'sequelize';
 
 import Firm from './Firm.js';
 
@@ -12,6 +19,7 @@ class User extends Model<
   declare lastName: string;
   declare username: string;
   declare email: string;
+  declare type: 'vendor' | 'customer';
   declare password: string;
   declare firmId: ForeignKey<Firm['firmId']>;
   declare createdAt: CreationOptional<Date>;
@@ -40,6 +48,11 @@ User.init(
       type: DataTypes.STRING(100),
       allowNull: false,
       unique: true
+    },
+    type: {
+      type: DataTypes.ENUM('vendor', 'customer'),
+      allowNull: false,
+      defaultValue: 'customer'
     },
     password: {
       type: DataTypes.STRING(255),

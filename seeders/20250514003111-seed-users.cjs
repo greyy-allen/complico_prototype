@@ -27,6 +27,7 @@ module.exports = {
         email: 'shelbythomas@shelby.com',
         password: await bcrypt.hash('password123', 10),
         firmId: firmShelby.firmId,
+        type: 'vendor',
         createdAt: new Date(),
       },
       {
@@ -37,6 +38,7 @@ module.exports = {
         email: 'manisbat@jusleague.com',
         password: await bcrypt.hash('password123', 10),
         firmId: firmAdVin.firmId,
+        type: 'customer',
         createdAt: new Date(),
       }
     ]);
