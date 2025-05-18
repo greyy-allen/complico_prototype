@@ -1,8 +1,13 @@
-import type { Request, Response } from "express";
 import dotenv from "dotenv";
+import path from "path";
+
+dotenv.config({
+  path: path.join(__dirname, "..", "..", ".env"), // .. = /server
+});
+
+import type { Request, Response } from "express";
 import User from "../models/User.js";
 
-dotenv.config();
 
 export const getUsers = async (
   _req: Request,

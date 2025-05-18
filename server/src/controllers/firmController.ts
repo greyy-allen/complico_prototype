@@ -1,8 +1,12 @@
-import type { Request, Response } from "express";
 import dotenv from "dotenv";
-import Firm from "../models/Firm.js";
+import path from "path";
 
-dotenv.config();
+dotenv.config({
+  path: path.join(__dirname, "..", ".env"), // .. = /server
+});
+
+import type { Request, Response } from "express";
+import Firm from "../models/Firm.js";
 
 export const getFirms = async (
   _req: Request,

@@ -1,8 +1,12 @@
-import pg from "pg"; 
 import dotenv from "dotenv";
-import type { PoolConfig, Pool as PgPool } from "pg";
+import path from "path";
 
-dotenv.config();
+dotenv.config({
+  path: path.join(__dirname, "..", ".env"), // .. = /server
+});
+
+import pg from "pg"; 
+import type { PoolConfig, Pool as PgPool } from "pg";
 
 const {
     PG_USER,

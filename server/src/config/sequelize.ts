@@ -1,7 +1,11 @@
-import { Sequelize } from "sequelize";
 import dotenv from "dotenv";
+import path from "path";
 
-dotenv.config();
+dotenv.config({
+    path: path.join(__dirname, "..", "..", ".env"),
+});
+
+import { Sequelize } from "sequelize";
 
 const {
     PG_USER: username,

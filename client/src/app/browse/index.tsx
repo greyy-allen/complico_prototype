@@ -2,10 +2,13 @@ import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import Link from "next/link";
 import BrowsecontentGroup126 from "./BrowsecontentGroup126";
-import BrowsecontentGroup1739 from "./BrowsecontentGroup1739";
 import BrowseProducts from "./BrowseProducts";
 import { Heading } from "@/components/ui";
 import React from "react";
+
+import dotenv from "dotenv";
+dotenv.config();
+
 
 export default function BrowseContentPage() {
   return (
@@ -62,7 +65,6 @@ export default function BrowseContentPage() {
           </div>
           <BrowseProducts />
         </div>
-        <BrowsecontentGroup1739 />
         <Footer className="mb-8 ml-[52px] mr-12 mt-9 md:mx-0" />
       </div>
     </div>

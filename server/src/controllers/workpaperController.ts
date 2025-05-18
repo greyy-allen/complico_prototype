@@ -1,8 +1,12 @@
-import type { Request, Response } from "express";
 import dotenv from "dotenv";
-import Workpaper from "../models/Workpaper.js";
+import path from "path";
 
-dotenv.config();
+dotenv.config({
+  path: path.join(__dirname, "..", "..", ".env"), // .. = /server
+});
+
+import type { Request, Response } from "express";
+import Workpaper from "../models/Workpaper.js";
 
 export const getWorkpapers = async (
   _req: Request,
