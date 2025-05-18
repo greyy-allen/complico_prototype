@@ -3,7 +3,11 @@
 import { Button } from "@/components/ui";
 import React from "react";
 
-export default function ChooseRolePage() {
+type User = {
+  userId: string;
+}
+
+export default function ChooseRole() {
   const handleClick = (role: 'vendor' | 'user') => {
     console.log(`Selected role: ${role}`);
     // TODO: route or store selection

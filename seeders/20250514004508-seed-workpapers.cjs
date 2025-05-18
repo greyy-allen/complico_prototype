@@ -10,19 +10,20 @@ module.exports = {
     `);
 
     const shelby = users.find(u => u.email === 'shelbythomas@shelby.com');
-    const bruce = users.find(u => u.email === 'manisbat@jusleague.com');
 
-    if (!shelby || !bruce) {
-      throw new Error('Required users not found. Run user seeder first.');
+    if (!shelby) {
+      throw new Error('Shelby user not found. Run user seeder first.');
     }
+
+    const now = new Date();
 
     await queryInterface.bulkInsert('workpapers', [
       {
         workpaperId: uuidv4(),
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        createdAt: now,
+        updatedAt: now,
         createdBy: shelby.userId,
-        publishedAt: new Date(),
+        publishedAt: now,
         publishedBy: shelby.userId,
         region: ['australia'],
         name: 'BAS 2025 Q1',
@@ -33,11 +34,11 @@ module.exports = {
       },
       {
         workpaperId: uuidv4(),
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        createdBy: bruce.userId,
-        publishedAt: new Date(),
-        publishedBy: bruce.userId,
+        createdAt: now,
+        updatedAt: now,
+        createdBy: shelby.userId,
+        publishedAt: now,
+        publishedBy: shelby.userId,
         region: ['newZealand'],
         name: 'FBT 2025',
         description: 'Fringe benefits tax workpaper',
@@ -47,8 +48,8 @@ module.exports = {
       },
       {
         workpaperId: uuidv4(),
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        createdAt: now,
+        updatedAt: now,
         createdBy: shelby.userId,
         region: ['australia', 'unitedKingdom'],
         name: 'Compliance – Year End 2024',
@@ -59,11 +60,11 @@ module.exports = {
       },
       {
         workpaperId: uuidv4(),
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        createdBy: bruce.userId,
-        publishedAt: new Date(),
-        publishedBy: bruce.userId,
+        createdAt: now,
+        updatedAt: now,
+        createdBy: shelby.userId,
+        publishedAt: now,
+        publishedBy: shelby.userId,
         region: ['australia'],
         name: 'GST Annual Report 2025',
         description: 'Annual GST filing template',
@@ -73,10 +74,10 @@ module.exports = {
       },
       {
         workpaperId: uuidv4(),
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        createdAt: now,
+        updatedAt: now,
         createdBy: shelby.userId,
-        publishedAt: new Date(),
+        publishedAt: now,
         publishedBy: shelby.userId,
         region: ['unitedKingdom'],
         name: 'UK Corporation Tax 2025',
@@ -87,11 +88,11 @@ module.exports = {
       },
       {
         workpaperId: uuidv4(),
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        createdBy: bruce.userId,
-        publishedAt: new Date(),
-        publishedBy: bruce.userId,
+        createdAt: now,
+        updatedAt: now,
+        createdBy: shelby.userId,
+        publishedAt: now,
+        publishedBy: shelby.userId,
         region: ['australia'],
         name: 'Trust Distribution 2025',
         description: 'Workpaper for trust distribution schedules',
@@ -101,10 +102,10 @@ module.exports = {
       },
       {
         workpaperId: uuidv4(),
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        createdAt: now,
+        updatedAt: now,
         createdBy: shelby.userId,
-        publishedAt: new Date(),
+        publishedAt: now,
         publishedBy: shelby.userId,
         region: ['newZealand'],
         name: 'NZ GST Return Q1 2025',
@@ -115,11 +116,11 @@ module.exports = {
       },
       {
         workpaperId: uuidv4(),
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        createdBy: bruce.userId,
-        publishedAt: new Date(),
-        publishedBy: bruce.userId,
+        createdAt: now,
+        updatedAt: now,
+        createdBy: shelby.userId,
+        publishedAt: now,
+        publishedBy: shelby.userId,
         region: ['australia'],
         name: 'Payroll Reconciliation 2024',
         description: 'Workpaper for annual payroll reconciliations',
@@ -129,10 +130,10 @@ module.exports = {
       },
       {
         workpaperId: uuidv4(),
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        createdAt: now,
+        updatedAt: now,
         createdBy: shelby.userId,
-        publishedAt: new Date(),
+        publishedAt: now,
         publishedBy: shelby.userId,
         region: ['australia', 'newZealand'],
         name: 'Year-End Checklist 2025',
