@@ -1,8 +1,14 @@
+import dotenv from "dotenv";
+import path from "path";
+
+dotenv.config({
+  path: path.join(__dirname, "..", ".env"), // .. = /server
+});
+
 import express from "express";
 import helmet from "helmet";
 import morgan from "morgan";
 import cors from "cors";
-import dotenv from "dotenv";
 
 import sequelize from "./config/sequelize.js";
 import "./models/User.js";
@@ -15,7 +21,7 @@ import workpaperRoutes from "./routes/workpaperRoutes";
 import userRoutes from "./routes/userRoutes";
 import subscriptionRoutes from "./routes/subscriptionRoutes";
 
-dotenv.config();
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -25,7 +31,7 @@ console.log(PORT);
 app.use(express.json());
 app.use(cors());
 app.use(helmet()); //middleware security, helps protect app by adding various http headers
-app.use(morgan("dev")); //request logger
+app.use(morgan("dev")); //request loggergi
 
 app.use("/api/products", productRoutes);
 app.use("/api/firms", firmRoutes);

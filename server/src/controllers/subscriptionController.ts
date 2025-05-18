@@ -1,8 +1,11 @@
-import { Request, Response } from "express";
 import dotenv from "dotenv";
-import WorkpapersAPI from "../services/workpapersAPI";
+import path from "path";
 
-dotenv.config();
+dotenv.config({
+  path: path.join(__dirname, "..", "..", ".env"), // .. = /server
+});
+import { Request, Response } from "express";
+import WorkpapersAPI from "../services/workpapersAPI";
 
 const workpapersAPI = new WorkpapersAPI();
 

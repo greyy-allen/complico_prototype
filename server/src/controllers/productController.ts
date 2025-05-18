@@ -1,9 +1,12 @@
+import dotenv from "dotenv";
+import path from "path";
+
+dotenv.config({
+  path: path.join(__dirname, "..", ".env"), // .. = /server
+});
 // -------------------- imports --------------------
 import type { Request, Response } from "express";
-import dotenv from "dotenv";
 import workpapersAPI from "../sdk/workpapersAPI.js";
-
-dotenv.config();
 
 export const getProducts = async (
   _req: Request,
