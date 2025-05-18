@@ -6,6 +6,7 @@ import { Heading } from "@/components/ui";
 import Link from "next/link";
 
 import dotenv from "dotenv";
+import WorkpaperDetailPage from "../documentinformation/page";
 dotenv.config();
 
 const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL || 3000;
@@ -160,7 +161,7 @@ export default function BrowseProducts() {
             visibleData.map((workpaper) => (
               <Link
                 key={workpaper.workpaperId}
-                href={`/documentinformation/${workpaper.workpaperId}`}
+                href={`/choose-role`}
                 passHref
               >
                 <ProductDetails
@@ -219,7 +220,7 @@ export default function BrowseProducts() {
             visibleDataSP.map((workpaperSP) => (
               <Link
                 key={workpaperSP.workpaperId}
-                href={`/documentinformation/${workpaperSP.workpaperId}`}
+                href={`/choose-role`}
                 passHref
               >
                 <ProductDetails
@@ -278,7 +279,7 @@ export default function BrowseProducts() {
             visibleDataE.map((workpaperE) => (
               <Link
                 key={workpaperE.workpaperId}
-                href={`/documentinformation/${workpaperE.workpaperId}`}
+                href={`/choose-role`}
                 passHref
               >
                 <ProductDetails
