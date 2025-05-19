@@ -2,7 +2,7 @@ import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import ProductDetails1 from "../../components/ProductDetails1";
 import DocumentinformationGroup3343 from "./DocumentinformationGroup3343";
-import DocumentinformationGroup3353 from "./[workpaperId]/workPaperDetails";
+import DocumentinformationGroup3353 from "./[workpaperId]/workpaperdetails";
 import DocumentinformationPopular from "./DocumentinformationPopular";
 import { Button, Text, Heading } from "@/components/ui";
 import Link from "next/link";

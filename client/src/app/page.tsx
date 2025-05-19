@@ -93,8 +93,8 @@
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Link from "next/link";
-import BrowsecontentGroup126 from "./browse/BrowsecontentGroup126";
-import BrowseProducts from "./browse/BrowseProducts";
+import BrowsecontentGroup126 from "../components/Highlight/Highlight";
+import BrowseProducts from "./LandingWorkpapers";
 import { Heading } from "@/components/ui";
 import React from "react";
 

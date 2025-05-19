@@ -1,12 +1,12 @@
-import Footer from "../../components/Footer";
-import Header from "../../components/Header";
+import Footer from "../../../components/Footer";
+import Header from "../../../components/Header";
 import Link from "next/link";
-import BrowsecontentGroup126 from "./BrowsecontentGroup126";
-import BrowseProducts from "./BrowseProducts";
+import BrowsecontentGroup126 from "../../../components/Highlight/Highlight";
+import FirmWorkpapers from "../FirmWorkpapers";
 import { Heading } from "@/components/ui";
 import React from "react";
 
-export default function BrowseContentPage() {
+export default function FirmSubscriptionPage() {
   return (
     <div className="w-full bg-white-a700">
       <div className="relative z-[8] flex flex-col items-center">
@@ -59,7 +59,7 @@ export default function BrowseContentPage() {
             </section>
 
           </div>
-          <BrowseProducts />
+          <FirmWorkpapers />
         </div>
         <Footer className="mb-8 ml-[52px] mr-12 mt-9 md:mx-0" />
       </div>
