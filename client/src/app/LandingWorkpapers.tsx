@@ -1,15 +1,11 @@
 'use client';
 
 import React, { useEffect, useState, Suspense, useRef } from "react";
-import ProductDetails from "../../components/ProductDetails";
+import ProductDetails from "../components/ProductDetails";
 import { Heading } from "@/components/ui";
 import Link from "next/link";
 
-import dotenv from "dotenv";
-import WorkpaperDetailPage from "../documentinformation/page";
-dotenv.config();
-
-const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL || 3000;
+const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 
 type Workpaper = {
@@ -89,46 +85,6 @@ export default function BrowseProducts() {
 
   return (
     <div className="flex w-[78%] flex-col items-start gap-5 self-center md:w-full md:px-5">
-      {/* <Heading size="heading7xl" as="h3" className="text-[32px] font-bold md:text-[30px] sm:text-[28px]">
-        Workpaper Templates
-      </Heading>
-
-      <div className="grid grid-cols-4 gap-[30px] self-stretch md:grid-cols-3 sm:grid-cols-2">
-        <Suspense fallback={<div>Loading feed...</div>}>
-          {loading ? (
-            <div>Loading...</div>
-          ) : (
-            data.map((workpaper, index) => (
-              <Link
-                key={workpaper.workpaperId}
-                href={`/documentinformation/${workpaper.workpaperId}`}
-                passHref
-              >
-              <ProductDetails
-                key={workpaper.workpaperId}
-                arrowLeftImage="img_arrow_left.svg"
-                productName={workpaper.name}
-                productDescription={
-                  <>
-                    {workpaper.description}
-                    <br />
-                    <strong>Region:</strong> {workpaper.region.join(", ")}
-                    <br />
-                    <strong>Entity:</strong> {workpaper.entityType.join(", ")}
-                    <br />
-                    <strong>Tags:</strong> {workpaper.tags.join(", ")}
-                  </>
-                }
-                productRating="N/A"
-                productReviews="N/A"
-              />
-              </Link>
-            ))
-          )}
-        </Suspense>
-      </div> */}
-
-{/* =======================RECENTLY ADDED==================================== */}
       <div className="flex justify-between w-full">
         <Heading
           size="heading7xl"

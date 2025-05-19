@@ -1,16 +1,39 @@
 'use client';
 
 import { Button } from "@/components/ui";
+import { useRouter } from "next/navigation";
 import React from "react";
 
-type User = {
-  userId: string;
-}
+const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL;
+const NEXT_PUBLIC_CUSTOMER_ID = process.env.NEXT_PUBLIC_CUSTOMER_ID;
+const NEXT_PUBLIC_CUSTOMER_FIRMID = process.env.NEXT_PUBLIC_CUSTOMER_FIRMID;
 
 export default function ChooseRole() {
-  const handleClick = (role: 'vendor' | 'user') => {
-    console.log(`Selected role: ${role}`);
-    // TODO: route or store selection
+  const router = useRouter();
+
+  const handleClick = async (role: 'vendor' | 'user') => {
+    if (role === 'user') {
+      const res = await fetch(`${NEXT_PUBLIC_API_URL}/auth/mock-login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ customerId: NEXT_PUBLIC_CUSTOMER_ID})
+      })
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert("Login failed: " + data.error);
+        return;
+      }
+
+      localStorage.setItem("token", data.token);
+      
+      const firmId = NEXT_PUBLIC_CUSTOMER_FIRMID
+      router.push(`/subscriptions/${firmId}`);
+    } else {
+      console.log("Selected role: vendor");
+      // Route somewhere else
+    }
   };
 
   return (

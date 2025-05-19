@@ -20,6 +20,7 @@ import firmRoutes from "./routes/firmRoutes";
 import workpaperRoutes from "./routes/workpaperRoutes";
 import userRoutes from "./routes/userRoutes";
 import subscriptionRoutes from "./routes/subscriptionRoutes";
+import authRoutes from "./routes/authRoutes";
 
 
 
@@ -33,6 +34,10 @@ app.use(cors());
 app.use(helmet()); //middleware security, helps protect app by adding various http headers
 app.use(morgan("dev")); //request loggergi
 
+// Customer and Vendor
+app.use("/api/auth", authRoutes);
+
+// Customer
 app.use("/api/products", productRoutes);
 app.use("/api/firms", firmRoutes);
 app.use("/api/workpapers", workpaperRoutes);
