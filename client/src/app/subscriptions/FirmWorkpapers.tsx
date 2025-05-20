@@ -74,11 +74,11 @@ export default function FirmWorkpapers() {
                     <>
                       {workpaper.description}
                       <br />
-                      <strong>Region:</strong> {workpaper.region.join(", ")}
+                      <strong>Region:</strong> {Array.isArray(workpaper.region) ? workpaper.region.join(", ") : "N/A"}
                       <br />
-                      <strong>Entity:</strong> {workpaper.entityType.join(", ")}
+                      <strong>Entity:</strong> {Array.isArray(workpaper.entityType) ? workpaper.entityType.join(", ") : "N/A"}
                       <br />
-                      <strong>Tags:</strong> {workpaper.tags.join(", ")}
+                      <strong>Tags:</strong> {Array.isArray(workpaper.tags) ? workpaper.tags.join(", ") : "N/A"}
                     </>
                   }
                   productRating="N/A"
