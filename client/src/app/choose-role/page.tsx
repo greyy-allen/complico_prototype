@@ -32,7 +32,7 @@ export default function ChooseRole() {
       router.push(`/subscriptions/${firmId}`);
     } else {
       console.log("Selected role: vendor");
-      // Route somewhere else
+      router.push(`/contentlist`);
     }
   };
 
