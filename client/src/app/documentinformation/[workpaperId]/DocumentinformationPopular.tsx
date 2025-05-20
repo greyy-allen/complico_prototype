@@ -62,7 +62,7 @@ export default function DocumentinformationPopular() {
       const result = await response.json();
       console.log("Subscribed successfully: result");
       alert("Subscribed!");
-      router.push(`${NEXT_PUBLIC_API_URL}/subscriptions/${firmId}`);
+      router.push(`/subscriptions/${firmId}`);
     } catch (error) {
       console.error("Subscribe error:", error);
       alert("Subscription failed");
