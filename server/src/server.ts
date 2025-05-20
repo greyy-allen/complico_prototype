@@ -22,6 +22,7 @@ import userRoutes from "./routes/userRoutes";
 import subscriptionRoutes from "./routes/subscriptionRoutes";
 import authRoutes from "./routes/authRoutes";
 import contentRoutes from "./routes/contentRoutes";
+import reviewRoutes from "./routes/reviewRoutes";
 
 
 
@@ -44,6 +45,7 @@ app.use("/api/firms", firmRoutes);
 app.use("/api/workpapers", workpaperRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/subscriptions", subscriptionRoutes);
+app.use("/api/reviews", reviewRoutes);
 
 // Vendor
 app.use("/api/contents", contentRoutes);

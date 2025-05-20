@@ -2,7 +2,6 @@ import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import ProductDetails1 from "../../components/ProductDetails1";
 import DocumentinformationGroup3343 from "./DocumentinformationGroup3343";
-import DocumentinformationGroup3353 from "./[workpaperId]/workpaperdetails";
 import DocumentinformationPopular from "./[workpaperId]/DocumentinformationPopular";
 import { Button, Text, Heading } from "@/components/ui";
 import Link from "next/link";
@@ -79,7 +78,6 @@ export default function DocumentInformationPage() {
         <div className="flex flex-col items-center gap-[34px] self-stretch">
           <DocumentinformationPopular />
           <div className="ml-[38px] mr-[84px] flex items-start self-stretch md:mx-0 md:flex-col">
-            <DocumentinformationGroup3353 />
             <DocumentinformationGroup3343 />
           </div>
           <Link href="#" className="ml-12 self-start md:ml-0 md:text-[22px]">
