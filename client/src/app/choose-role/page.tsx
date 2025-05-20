@@ -6,6 +6,7 @@ import React from "react";
 
 const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL;
 const NEXT_PUBLIC_CUSTOMER_ID = process.env.NEXT_PUBLIC_CUSTOMER_ID;
+const NEXT_PUBLIC_VENDOR_ID = process.env.NEXT_PUBLIC_VENDOR_ID;
 const NEXT_PUBLIC_CUSTOMER_FIRMID = process.env.NEXT_PUBLIC_CUSTOMER_FIRMID;
 
 export default function ChooseRole() {
@@ -17,7 +18,7 @@ export default function ChooseRole() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ customerId: NEXT_PUBLIC_CUSTOMER_ID})
-      })
+      });
 
       const data = await res.json();
 
@@ -31,7 +32,21 @@ export default function ChooseRole() {
       const firmId = NEXT_PUBLIC_CUSTOMER_FIRMID
       router.push(`/subscriptions/${firmId}`);
     } else {
-      console.log("Selected role: vendor");
+      const res = await fetch(`${NEXT_PUBLIC_API_URL}/auth/mock-login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ customerId: NEXT_PUBLIC_VENDOR_ID})
+      })
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert("Login failed: " + data.error);
+        return;
+      }
+
+      localStorage.setItem("token", data.token);
+
       router.push(`/contentlist`);
     }
   };

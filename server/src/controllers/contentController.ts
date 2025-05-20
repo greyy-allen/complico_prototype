@@ -20,3 +20,26 @@ export const getContents = async (
         res.status(500).json({ error: error.message })
     }
 }
+
+export const getContentsbyfirmId = async (
+    req: Request,
+    res: Response
+): Promise<void> => {
+    const { firmId } = req.params;
+    
+    if (!firmId) {
+        res.status(400).json({ error: "firmId is required" });
+        return;
+    }
+
+    try {
+        const contents = await Content.findAll({
+            where: {firmId}
+        });
+
+        res.status(200).json(contents);
+    } catch (error: any) {
+        console.error("Error fetching contents by firmId", error.message);
+        res.status(500).json({ error: error.message });
+    }
+};
