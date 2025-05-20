@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import VisibilityList from "../../components/VisibilityList";
+import { useRouter } from "next/navigation";
+
 import {
   Img,
   Select,
@@ -26,6 +27,7 @@ export default function VendorProfileManagement() {
   const [searchBarValue1, setSearchBarValue1] = useState("");
   const [firmId, setFirmId] = useState<string | null>(null);
   const [data, setData] = useState<any[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -74,7 +76,10 @@ export default function VendorProfileManagement() {
       {/* Controls Row */}
       <div className="flex flex-wrap justify-between items-center mb-4 gap-4">
         <div className="flex items-center gap-2">
-          <Button className="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-semibold">
+          <Button
+            onClick={() => router.push("/create-content")}
+            className="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-semibold"
+          >
             + Listing
           </Button>
 
@@ -135,15 +140,72 @@ export default function VendorProfileManagement() {
               </div>
               <div className="flex flex-col gap-1">
                 <div className="font-medium text-sm">{item.name}</div>
-                <Select>
+                <Select
+                  defaultValue={item.workpaper ? "open" : "close"}
+                  onValueChange={async (value) => {
+                    const isCurrentlyOpen = !!item.workpaper;
+
+                    if (value === "open" && !isCurrentlyOpen) {
+                      const confirmed = window.confirm("Are you sure you want to make this content Open? This will create a workpaper.");
+                      if (!confirmed) return;
+
+                      const token = localStorage.getItem("token");
+
+                      try {
+                        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/workpapers`, {
+                          method: "POST",
+                          headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${token}`,
+                          },
+                          body: JSON.stringify({ contentId: item.contentId }),
+                        });
+
+                        if (!res.ok) throw new Error("Failed to create workpaper");
+
+                        // Optionally reload data or optimistically update UI
+                        alert("Workpaper created successfully!");
+                        window.location.reload(); // or refetch()
+                      } catch (err) {
+                        console.error(err);
+                        alert("Failed to create workpaper.");
+                      }
+                    }
+
+                    if (value === "close" && isCurrentlyOpen) {
+                      const confirmed = window.confirm("Are you sure you want to make this content Close? This will delete the associated workpaper.");
+                      if (!confirmed) return;
+
+                      const token = localStorage.getItem("token");
+
+                      try {
+                        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/workpapers/${item.contentId}`, {
+                          method: "DELETE",
+                          headers: {
+                            Authorization: `Bearer ${token}`,
+                          },
+                        });
+
+                        if (!res.ok) throw new Error("Failed to delete workpaper");
+
+                        alert("Workpaper deleted successfully!");
+                        window.location.reload(); // or refetch()
+                      } catch (err) {
+                        console.error(err);
+                        alert("Failed to delete workpaper.");
+                      }
+                    }
+                  }}
+                >
                   <SelectTrigger className="w-[120px]">
-                    <SelectValue placeholder="Visibility" />
+                    <SelectValue placeholder={item.workpaper ? "Open" : "Close"} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="public">Public</SelectItem>
-                    <SelectItem value="private">Private</SelectItem>
+                    <SelectItem value="open">Open</SelectItem>
+                    <SelectItem value="close">Close</SelectItem>
                   </SelectContent>
                 </Select>
+
               </div>
             </div>
           ))}
