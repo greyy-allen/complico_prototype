@@ -2,11 +2,12 @@
 
 import { ChipView, Text, Heading } from "@/components/ui";
 import React, { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL || 3000;
 
 export default function DocumentinformationPopular() {
+  const router = useRouter();
   const [chipOptions, setChipOptions] = React.useState(() => [
     { value: 1, label: `CATEGORY` },
     { value: 2, label: `CATEGORY` },
@@ -61,6 +62,7 @@ export default function DocumentinformationPopular() {
       const result = await response.json();
       console.log("Subscribed successfully: result");
       alert("Subscribed!");
+      router.push(`${NEXT_PUBLIC_API_URL}/subscriptions/${firmId}`);
     } catch (error) {
       console.error("Subscribe error:", error);
       alert("Subscription failed");

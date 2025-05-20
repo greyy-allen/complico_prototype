@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense, useState } from "react";
+import React, { useEffect, useState } from "react";
 import VisibilityList from "../../components/VisibilityList";
 import {
   Img,
@@ -17,11 +17,6 @@ import {
   Heading,
 } from "@/components/ui";
 
-const data = Array.from({ length: 25 }, (_, index) => ({
-  name: `Listing Name ${index + 1}`,
-  image: "img_placeholder.svg",
-}));
-
 const dropDownOptions = [
   { label: "Public", value: "public" },
   { label: "Private", value: "private" },
@@ -29,6 +24,38 @@ const dropDownOptions = [
 
 export default function VendorProfileManagement() {
   const [searchBarValue1, setSearchBarValue1] = useState("");
+  const [firmId, setFirmId] = useState<string | null>(null);
+  const [data, setData] = useState<any[]>([]);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    try {
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      console.log("Decoded payload:", payload);
+
+      setFirmId(payload.firmId);
+    } catch (e) {
+      console.warn("Invalid token format", e);
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchContent = async () => {
+      if (!firmId) return;
+
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/contents/${firmId}`);
+        const result = await response.json();
+        setData(result);
+      } catch (error) {
+        console.error("Failed to fetch content", error);
+      }
+    };
+
+    fetchContent();
+  }, [firmId]);
 
   return (
     <div className="w-full min-h-screen px-10 py-6 bg-gray-50">
@@ -94,28 +121,32 @@ export default function VendorProfileManagement() {
 
       {/* Grid Display */}
       <div className="grid grid-cols-5 gap-6">
-        {data.map((item, index) => (
-          <div
-            key={index}
-            className="border rounded p-4 bg-white shadow-sm flex flex-row items-center gap-4"
-          >
-            <div className="w-[60px] h-[60px] bg-gray-300 border flex items-center justify-center">
-              <span className="text-xs text-gray-500">Image</span>
+        {data
+          .filter((item) =>
+            item.name.toLowerCase().includes(searchBarValue1.toLowerCase())
+          )
+          .map((item, index) => (
+            <div
+              key={index}
+              className="border rounded p-4 bg-white shadow-sm flex flex-row items-center gap-4"
+            >
+              <div className="w-[60px] h-[60px] bg-gray-300 border flex items-center justify-center">
+                <span className="text-xs text-gray-500">Image</span>
+              </div>
+              <div className="flex flex-col gap-1">
+                <div className="font-medium text-sm">{item.name}</div>
+                <Select>
+                  <SelectTrigger className="w-[120px]">
+                    <SelectValue placeholder="Visibility" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="public">Public</SelectItem>
+                    <SelectItem value="private">Private</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
-            <div className="flex flex-col gap-1">
-              <div className="font-medium text-sm">{item.name}</div>
-              <Select>
-                <SelectTrigger className="w-[120px]">
-                  <SelectValue placeholder="Visibility" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="public">Public</SelectItem>
-                  <SelectItem value="private">Private</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        ))}
+          ))}
       </div>
     </div>
   );

@@ -42,9 +42,11 @@ app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/firms", firmRoutes);
 app.use("/api/workpapers", workpaperRoutes);
-app.use("/api/contents", contentRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/subscriptions", subscriptionRoutes);
+
+// Vendor
+app.use("/api/contents", contentRoutes);
 
 async function initDB(): Promise<void> {
     try {
