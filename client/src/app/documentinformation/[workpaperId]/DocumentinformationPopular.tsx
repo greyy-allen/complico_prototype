@@ -1,7 +1,10 @@
 "use client";
 
 import { ChipView, Text, Heading } from "@/components/ui";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+
+const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL || 3000;
 
 export default function DocumentinformationPopular() {
   const [chipOptions, setChipOptions] = React.useState(() => [
@@ -12,6 +15,57 @@ export default function DocumentinformationPopular() {
     { value: 5, label: `CATEGORY` },
   ]);
   const [selectedChipOptions, setSelectedChipOptions] = React.useState<number[]>([]);
+  const [subscriberId, setSubscriberId] = useState<string | null>(null);
+  const [firmId, setFirmId] = useState<string | null>(null);
+  const params = useParams();
+  const workpaperId = params?.workpaperId as string;
+
+  useEffect(()=>{
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    try{
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      console.log("Decoded payload:", payload);
+
+      const userId = payload.userId;
+      const firmId = payload.firmId;
+
+      setSubscriberId(userId);
+      setFirmId(firmId);
+    } catch (e) {
+      console.warn("Invalid token format", e);
+    }
+  }, [])
+
+  const handleSubscribe = async (contentId: string) => {
+    if (!firmId || !subscriberId) {
+      alert("Missing firm or user info." + console.log(firmId) +
+      console.log(subscriberId));
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await fetch(`${NEXT_PUBLIC_API_URL}/subscriptions/${firmId}/${subscriberId}/${contentId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) throw new Error("Failed to subscribe");
+
+      const result = await response.json();
+      console.log("Subscribed successfully: result");
+      alert("Subscribed!");
+    } catch (error) {
+      console.error("Subscribe error:", error);
+      alert("Subscription failed");
+    }
+  }
 
   return (
     <div className="self-stretch bg-gray-100 p-6 sm:p-5">
@@ -49,13 +103,19 @@ export default function DocumentinformationPopular() {
                   </div>
                 </div>
               </div>
-              <Heading
-                size="heading7xl"
-                as="h3"
-                className="flex h-[44px] w-[44px] items-center justify-center rounded-[22px] border-[3px] border-solid border-black-900 bg-blue_gray-100 text-center text-[32px] font-bold md:text-[30px] sm:text-[28px]"
+              <button
+                onClick={() => handleSubscribe(workpaperId)}
+                className="flex h-[44px] w-[44px] items-center justify-center rounded-[22px] border-[3px] border-solid border-black-900 bg-blue_gray-100 text-center cursor-pointer"
               >
-                +
-              </Heading>
+                <Heading
+                  size="heading7xl"
+                  as="span" // use span so it's valid inside button
+                  className="text-[32px] font-bold md:text-[30px] sm:text-[28px]"
+                >
+                  +
+                </Heading>
+              </button>
+
             </div>
             <Text
               size="text7xl"

@@ -85,11 +85,7 @@ export default function ExploreWorkpapers() {
             <div>Loading...</div>
           ) : (
             visibleData.map((workpaper) => (
-              <Link
-                key={workpaper.workpaperId}
-                href={`/choose-role`}
-                passHref
-              >
+              <Link key={workpaper.workpaperId} href={`/documentinformation/${workpaper.workpaperId}`}>
                 <ProductDetails
                   arrowLeftImage="img_arrow_left.svg"
                   productName={workpaper.name}

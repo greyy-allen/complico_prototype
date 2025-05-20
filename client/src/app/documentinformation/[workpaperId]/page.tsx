@@ -3,77 +3,14 @@
 import Footer from "../../../components/Footer";
 import Header from "../../../components/Header";
 import ProductDetails1 from "../../../components/ProductDetails1";
+import ExploreWorkpapers from "../../../components/ExploreWorkpapers";
 import DocumentinformationGroup3343 from "./../DocumentinformationGroup3343";
-import DocumentinformationPopular from "./../DocumentinformationPopular";
+import DocumentinformationPopular from "./DocumentinformationPopular";
 import WorkPaperDetails from "./workpaperdetails";
 import { Button, Text, Heading } from "@/components/ui";
 import Link from "next/link";
 import React, { useEffect, useState, Suspense } from "react";
 import { useParams } from "next/navigation";
-
-const data = [
-  {
-    productName: "Product Name",
-    productDescription: (
-      <>
-        XX XX XXXXXXX XXXXXXXXX X XX XXXXX XX
-        <br />
-        XXXXXXXXX XX X X XXXXXXXXXXX XXX XX X<br />
-        XXXXXXXXXXXXXX X XXXXX X X XXX XXX
-        <br />
-        XXX XX XXX X XXXXX XXX XXXXXXXXXXXXX
-      </>
-    ),
-    productRating: "Rating",
-    productReviews: "Reviews",
-  },
-  {
-    productName: "Product Name",
-    productDescription: (
-      <>
-        XX XX XXXXXXX XXXXXXXXX X XX XXXXX XX
-        <br />
-        XXXXXXXXX XX X X XXXXXXXXXXX XXX XX X<br />
-        XXXXXXXXXXXXXX X XXXXX X X XXX XXX
-        <br />
-        XXX XX XXX X XXXXX XXX XXXXXXXXXXXXX
-      </>
-    ),
-    productRating: "Rating",
-    productReviews: "Reviews",
-  },
-  {
-    productName: "Product Name",
-    productDescription: (
-      <>
-        XX XX XXXXXXX XXXXXXXXX X XX XXXXX XX
-        <br />
-        XXXXXXXXX XX X X XXXXXXXXXXX XXX XX X<br />
-        XXXXXXXXXXXXXX X XXXXX X X XXX XXX
-        <br />
-        XXX XX XXX X XXXXX XXX XXXXXXXXXXXXX
-      </>
-    ),
-    productRating: "Rating",
-    productReviews: "Reviews",
-  },
-  {
-    productName: "Product Name",
-    productDescription: (
-      <>
-        XX XX XXXXXXX XXXXXXXXX X XX XXXXX XX
-        <br />
-        XXXXXXXXX XX X X XXXXXXXXXXX XXX XX X<br />
-        XXXXXXXXXXXXXX X XXXXX X X XXX XXX
-        <br />
-        XXX XX XXX X XXXXX XXX XXXXXXXXXXXXX
-      </>
-    ),
-    productRating: "Rating",
-    productReviews: "Reviews",
-  },
-];
-
 
 export default function DocumentInformationPage() {
   return (
@@ -100,18 +37,8 @@ export default function DocumentInformationPage() {
               XXX XXX XX XXX X XXXXX XXX XXXXXXXXXXXXXXX XX XXXXXXX XXXXXXXXX X XX XXXXX XXXXXXXXXX XX X X XXXXXXXXXXX
               XXX XX X XXXXXXXXXXXXXX X XXXXX X X XXX XXX XX
             </Text>
-            <div className="relative mx-auto mt-[-28px] flex w-full max-w-[1400px] flex-col items-start gap-5 md:px-5">
-              <Heading size="heading7xl" as="h3" className="text-[32px] font-bold md:text-[30px] sm:text-[28px]">
-                Explore
-              </Heading>
-              <div className="mr-2.5 flex gap-[30px] self-stretch md:mr-0 md:flex-col">
-                <Suspense fallback={<div>Loading feed...</div>}>
-                  {data.map((d, index) => (
-                    <ProductDetails1 {...d} key={"group3127" + index} />
-                  ))}
-                </Suspense>
-              </div>
-            </div>
+            
+            <ExploreWorkpapers></ExploreWorkpapers>
           </div>
           <div className="flex flex-col items-center justify-center gap-[34px] self-stretch bg-deep_purple-a200 px-14 py-[62px] md:p-5">
             <Heading
