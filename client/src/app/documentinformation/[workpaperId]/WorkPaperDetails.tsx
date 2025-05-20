@@ -1,11 +1,10 @@
-import { Text, Heading, Separator } from "@/components/ui";
-import React, { useEffect, useState, Suspense } from "react";
+"use client";
+
+import { Text, Heading } from "@/components/ui";
+import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 
-import dotenv from "dotenv";
-
-dotenv.config();
-const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL || 3000;
+const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
 type Workpaper = {
   workpaperId: string;
@@ -17,15 +16,41 @@ type Workpaper = {
   entityType: string[];
 };
 
+type Review = {
+  name: string;
+  avatar: string;
+  rating: number;
+  comment: string;
+  date: string;
+};
+
+const dummyReviews: Review[] = [
+  {
+    name: "John Smith",
+    avatar: "/avatars/user1.jpg",
+    rating: 5,
+    comment: "Awesome Product, would 100% recommend. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    date: "01/01/2025",
+  },
+  {
+    name: "Michael Lee",
+    avatar: "/avatars/user2.jpg",
+    rating: 4,
+    comment: "So far so good. Vivamus aliquet nunc at dictum luctus.",
+    date: "01/01/2025",
+  },
+];
+
 export default function WorkPaperDetails() {
   const { workpaperId } = useParams();
   const [workpaper, setWorkpaper] = useState<Workpaper | null>(null);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<"overview" | "reviews">("overview");
 
   useEffect(() => {
     const fetchWorkpaper = async () => {
       try {
-        const response = await fetch(NEXT_PUBLIC_API_URL + `/workpapers/${workpaperId}`)
+        const response = await fetch(`${NEXT_PUBLIC_API_URL}/workpapers/${workpaperId}`);
         const result = await response.json();
         setWorkpaper(result);
       } catch (error) {
@@ -38,40 +63,92 @@ export default function WorkPaperDetails() {
     if (workpaperId) fetchWorkpaper();
   }, [workpaperId]);
 
-  if (loading) return <div>Loading...</div>;
-  if (!workpaper) return <div>No workpaper found.</div>;
+  if (loading) return <div className="text-center py-10">Loading...</div>;
+  if (!workpaper) return <div className="text-center py-10">No workpaper found.</div>;
 
   return (
-    <div className="flex flex-1 flex-col items-start self-center md:self-stretch md:px-5">
-      <div className="flex items-start self-stretch sm:flex-col">
-        <div className="flex w-[18%] flex-col items-start gap-1 self-center sm:w-full">
-          <Heading size="heading5xl" as="h4" className="text-[24px] font-bold md:text-[22px]">
-            Overview
-          </Heading>
-          <Separator orientation="horizontal" className="h-[5px] w-[74%] bg-black-900" />
-        </div>
-        <Heading size="heading5xl" as="h5" className="text-[24px] font-bold md:text-[22px]">
+    <div className="max-w-5xl mx-auto px-4 py-8 min-h-[600px]">
+      {/* Tabs */}
+      <div className="flex gap-10 border-b pb-2 text-lg font-semibold">
+        <button
+          onClick={() => setActiveTab("overview")}
+          className={`relative pb-2 transition-colors duration-200 ${
+            activeTab === "overview"
+              ? "text-black after:absolute after:left-0 after:bottom-0 after:h-1 after:w-full after:bg-black"
+              : "text-gray-500"
+          }`}
+        >
+          Overview
+        </button>
+        <button
+          onClick={() => setActiveTab("reviews")}
+          className={`relative pb-2 transition-colors duration-200 ${
+            activeTab === "reviews"
+              ? "text-black after:absolute after:left-0 after:bottom-0 after:h-1 after:w-full after:bg-black"
+              : "text-gray-500"
+          }`}
+        >
           Review and Feedback
-        </Heading>
+        </button>
       </div>
-      <Heading size="heading5xl" as="h6" className="mt-1.5 text-[24px] font-bold md:text-[22px]">
-        Description
-      </Heading>
-      <Text as="p" className="mt-3.5 w-full text-[14px] font-normal leading-4">
-        {workpaper.description}
-      </Text>
-      <Heading size="heading5xl" as="h5" className="ml-1.5 mt-[58px] text-[24px] font-bold md:ml-0 md:text-[22px]">
-        How to use
-      </Heading>
-      <Text as="p" className="ml-2.5 mt-3.5 w-full text-[14px] font-normal leading-4 md:ml-0">
-        XX XX XXXXXXX XXXXXXXXX X XX XXXXX XXXXXXXXXX XX X X XXXXXXXXXXX XXX XX X XXXXXXXXXXXXXX X XXXXX X X XXX XXX XXX
-        XX XXX X XXXXX XXX XXXXXXXXXXXXXXX XX XXXXXXX XXXXXXXXX X XX XXXXX XXXXXXXXXX XX X X XXXXXXXXXXX XXX XX X
-        XXXXXXXXXXXXXX X XXXXX X X XXX XXX XXX XX XXX X XXXXX XXX XXXXXXXXXXXXX XX XX XXXXXXX XXXXXXXXX X XX XXXXX
-        XXXXXXXXXX XX X X XXXXXXXXXXX XXX XX X XXXXXXXXXXXXXX X XXXXX X X XXX XXX XXX XX XXX X XXXXX XXX XXXXXXXXXXXXX
-        XX XXXXX XXXXXXXXXX XX X X XXXXXXXXXXX XXX XX X XXXXXXXXXXXXXX X XXXXX X X XXX XXX XXX XX XXX X XXXXX XXX
-        XXXXXXXXXXXXX XX XX XXXXXXX XXXXXXXXX X XX XXXXX XXXXXXXXXX XX X X XXXXXXXXXXX XXX XX X XXXXXXXXXXXXXX X XXXXX X
-        X XXX XXX XXX XX XXX X XXXXX XXX XXXXXXXXXXXXX
-      </Text>
+
+      <div className="min-h-[400px] min-w-[1000px] mt-6 transition-opacity duration-300 ease-in-out">
+        {activeTab === "overview" && (
+          <>
+            <Heading as="h2" className="text-2xl font-bold mb-2">
+              Description
+            </Heading>
+            <Text as="p" className="text-base leading-6 text-gray-700 mb-6">
+              {workpaper.description}
+            </Text>
+
+            <Heading as="h2" className="text-2xl font-bold mb-2">
+              How to use
+            </Heading>
+            <Text as="p" className="text-base leading-6 text-gray-700">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo voluptatem sint voluptatibus in cumque...
+            </Text>
+          </>
+        )}
+
+        {activeTab === "reviews" && (
+          <>
+            <div className="flex items-center justify-between mb-6">
+              <button
+                onClick={() => alert("Open Add Review Modal")}
+                className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-semibold"
+              >
+                + Add Review
+              </button>
+            </div>
+
+            {dummyReviews.map((review, index) => (
+              <div
+                key={index}
+                className="bg-white p-6 rounded-xl shadow-md max-w-2xl mx-auto mb-6 flex flex-col gap-4"
+              >
+                <div className="flex gap-4 items-center">
+                  <img
+                    src={review.avatar}
+                    alt={review.name}
+                    className="w-16 h-16 rounded-full object-cover"
+                  />
+                  <div>
+                    <p className="font-semibold text-lg">{review.name}</p>
+                    <p className="text-sm text-gray-600 mt-1">{review.comment}</p>
+                  </div>
+                </div>
+                <div className="flex justify-between items-center">
+                  <div className="flex gap-1 text-yellow-500 text-sm">
+                    {"⭐".repeat(review.rating)}
+                  </div>
+                  <p className="text-sm text-gray-500">{review.date}</p>
+                </div>
+              </div>
+            ))}
+          </>
+        )}
+      </div>
     </div>
   );
 }
