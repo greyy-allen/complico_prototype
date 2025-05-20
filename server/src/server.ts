@@ -21,6 +21,7 @@ import workpaperRoutes from "./routes/workpaperRoutes";
 import userRoutes from "./routes/userRoutes";
 import subscriptionRoutes from "./routes/subscriptionRoutes";
 import authRoutes from "./routes/authRoutes";
+import contentRoutes from "./routes/contentRoutes";
 
 
 
@@ -41,6 +42,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/firms", firmRoutes);
 app.use("/api/workpapers", workpaperRoutes);
+app.use("/api/contents", contentRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/subscriptions", subscriptionRoutes);
 

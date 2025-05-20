@@ -2,11 +2,11 @@
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  async up(queryInterface, Sequelize) {
     await queryInterface.sequelize.query(
       'CREATE EXTENSION IF NOT EXISTS "pgcrypto";'
     );
-    
+
     await queryInterface.createTable('workpapers', {
       workpaperId: {
         type: Sequelize.UUID,
@@ -45,6 +45,16 @@ module.exports = {
         onDelete: 'SET NULL',
       },
 
+      contentId: {
+        type: Sequelize.UUID,
+        references: {
+          model: 'content',
+          key: 'contentId',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL',
+      },
+
       region: {
         type: Sequelize.ARRAY(Sequelize.STRING),
         allowNull: false,
@@ -68,7 +78,7 @@ module.exports = {
     });
   },
 
-  async down (queryInterface/*, Sequelize*/) {
+  async down(queryInterface) {
     await queryInterface.dropTable('workpapers');
   }
 };

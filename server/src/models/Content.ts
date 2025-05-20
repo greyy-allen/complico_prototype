@@ -8,7 +8,7 @@ import {
 } from 'sequelize';
 import sequelize from '../config/sequelize.js';
 import User from './User.js';
-import Content from './Content.js';
+import Firm from './Firm.js';
 
 const ALLOWED_WORKPAPER = [
   'compliance',
@@ -19,7 +19,6 @@ const ALLOWED_WORKPAPER = [
   'gst',
   'corporationTax',
   'payroll',
-  'trustDistribution',
 ] as const;
 
 const ALLOWED_ENTITY = [
@@ -36,18 +35,17 @@ const ALLOWED_REGIONS = [
   'republicOfIreland',
 ] as const;
 
-class Workpaper extends Model<
-  InferAttributes<Workpaper>,
-  InferCreationAttributes<Workpaper>
+class Content extends Model<
+  InferAttributes<Content>,
+  InferCreationAttributes<Content>
 > {
-  declare workpaperId: CreationOptional<string>;
-  declare contentId: ForeignKey<Content['contentId']>;
+  declare contentId: CreationOptional<string>;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
-  declare publishedAt: CreationOptional<Date | null>;
+  declare created: CreationOptional<Date | null>;
 
   declare createdBy: ForeignKey<User['userId']>;
-  declare publishedBy: ForeignKey<User['userId']> | null;
+  declare firmId: ForeignKey<Firm['firmId']>;
 
   declare region: string[];
   declare name: string;
@@ -58,25 +56,27 @@ class Workpaper extends Model<
   declare entityType: string[] | null;
 }
 
-Workpaper.init(
+Content.init(
   {
-    workpaperId: {
+    contentId: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
 
-    contentId: {
+    createdAt: { type: DataTypes.DATE },
+    updatedAt: { type: DataTypes.DATE },
+    created:   { type: DataTypes.DATE },
+
+    createdBy: {
       type: DataTypes.UUID,
       allowNull: false,
     },
 
-    createdAt: { type: DataTypes.DATE },
-    updatedAt: { type: DataTypes.DATE },
-    publishedAt: { type: DataTypes.DATE },
-
-    createdBy: { type: DataTypes.UUID, allowNull: false },
-    publishedBy: { type: DataTypes.UUID },
+    firmId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
 
     region: {
       type: DataTypes.ARRAY(DataTypes.STRING),
@@ -142,7 +142,7 @@ Workpaper.init(
   },
   {
     sequelize,
-    tableName: 'workpapers',
+    tableName: 'content',
     timestamps: true,
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
@@ -150,12 +150,10 @@ Workpaper.init(
 );
 
 // Associations
-Workpaper.belongsTo(User, { as: 'creator', foreignKey: 'createdBy' });
-Workpaper.belongsTo(User, { as: 'publisher', foreignKey: 'publishedBy' });
-Workpaper.belongsTo(Content, { as: 'content', foreignKey: 'contentId' });
+Content.belongsTo(User, { as: 'creator', foreignKey: 'createdBy' });
+Content.belongsTo(Firm, { as: 'firm', foreignKey: 'firmId' });
 
-User.hasMany(Workpaper, { foreignKey: 'createdBy', as: 'createdWorkpapers' });
-User.hasMany(Workpaper, { foreignKey: 'publishedBy', as: 'publishedWorkpapers' });
-Content.hasOne(Workpaper, { foreignKey: 'contentId', as: 'workpaper' });
+User.hasMany(Content, { foreignKey: 'createdBy', as: 'createdContent' });
+Firm.hasMany(Content, { foreignKey: 'firmId', as: 'firmContent' });
 
-export default Workpaper;
+export default Content;
