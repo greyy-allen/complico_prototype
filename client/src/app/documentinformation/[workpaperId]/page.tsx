@@ -6,7 +6,7 @@ import ProductDetails1 from "../../../components/ProductDetails1";
 import ExploreWorkpapers from "../../../components/ExploreWorkpapers";
 import DocumentinformationGroup3343 from "./../DocumentinformationGroup3343";
 import DocumentinformationPopular from "./DocumentinformationPopular";
-import WorkPaperDetails from "./workpaperdetails";
+import WorkPaperDetails from "./WorkPaperDetails";
 import { Button, Text, Heading } from "@/components/ui";
 import Link from "next/link";
 import React, { useEffect, useState, Suspense } from "react";
