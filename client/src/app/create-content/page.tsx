@@ -83,97 +83,115 @@ export default function CreateContentPage() {
 };
 
   return (
-    <div className="min-h-screen bg-gray-50 px-8 py-10">
-      <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-8">
-        <h1 className="text-2xl font-bold mb-6">Create New Content</h1>
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white px-8 py-10">
+      <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-lg p-8 border border-gray-100">
+        <h1 className="text-2xl font-bold mb-6 text-indigo-800 flex items-center">
+          <span className="bg-indigo-100 text-indigo-600 p-2 rounded-full mr-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+            </svg>
+          </span>
+          Create New Content
+        </h1>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Name */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Title</label>
+          <div className="bg-white rounded-lg p-4 border border-gray-100 shadow-sm transition-all hover:shadow-md">
+            <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="w-full px-3 py-2 border rounded-md text-sm"
+              placeholder="Enter a descriptive title for your content"
+              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
             />
           </div>
 
           {/* Description */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Description</label>
+          <div className="bg-white rounded-lg p-4 border border-gray-100 shadow-sm transition-all hover:shadow-md">
+            <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={4}
               required
-              className="w-full px-3 py-2 border rounded-md text-sm"
+              placeholder="Provide a detailed description of your content"
+              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
             />
           </div>
 
           {/* Regions */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Regions</label>
+          <div className="bg-white rounded-lg p-4 border border-gray-100 shadow-sm transition-all hover:shadow-md">
+            <label className="block text-sm font-medium text-gray-700 mb-3">Regions</label>
             <div className="flex flex-wrap gap-3">
               {REGION_OPTIONS.map((item) => (
-                <label key={item} className="flex items-center gap-2 text-sm">
+                <label key={item} className="flex items-center gap-2 text-sm bg-gray-50 px-3 py-2 rounded-md hover:bg-gray-100 transition-all cursor-pointer">
                   <input
                     type="checkbox"
                     checked={region.includes(item)}
                     onChange={() => setRegion(toggleValue(region, item))}
+                    className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500"
                   />
-                  {item}
+                  <span className="capitalize">{item.replace(/([A-Z])/g, ' $1').trim()}</span>
                 </label>
               ))}
             </div>
           </div>
 
           {/* Workpaper Type */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Workpaper Types</label>
+          <div className="bg-white rounded-lg p-4 border border-gray-100 shadow-sm transition-all hover:shadow-md">
+            <label className="block text-sm font-medium text-gray-700 mb-3">Workpaper Types</label>
             <div className="flex flex-wrap gap-3">
               {WORKPAPER_OPTIONS.map((item) => (
-                <label key={item} className="flex items-center gap-2 text-sm">
+                <label key={item} className="flex items-center gap-2 text-sm bg-gray-50 px-3 py-2 rounded-md hover:bg-gray-100 transition-all cursor-pointer">
                   <input
                     type="checkbox"
                     checked={workpaperType.includes(item)}
                     onChange={() => setWorkpaperType(toggleValue(workpaperType, item))}
+                    className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500"
                   />
-                  {item}
+                  <span className="capitalize">{item.replace(/([A-Z])/g, ' $1').trim()}</span>
                 </label>
               ))}
             </div>
           </div>
 
           {/* Entity Type */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Entity Types</label>
+          <div className="bg-white rounded-lg p-4 border border-gray-100 shadow-sm transition-all hover:shadow-md">
+            <label className="block text-sm font-medium text-gray-700 mb-3">Entity Types</label>
             <div className="flex flex-wrap gap-3">
               {ENTITY_OPTIONS.map((item) => (
-                <label key={item} className="flex items-center gap-2 text-sm">
+                <label key={item} className="flex items-center gap-2 text-sm bg-gray-50 px-3 py-2 rounded-md hover:bg-gray-100 transition-all cursor-pointer">
                   <input
                     type="checkbox"
                     checked={entityType.includes(item)}
                     onChange={() => setEntityType(toggleValue(entityType, item))}
+                    className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500"
                   />
-                  {item}
+                  <span className="capitalize">{item}</span>
                 </label>
               ))}
             </div>
           </div>
 
           {/* Tags */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Tags</label>
+          <div className="bg-white rounded-lg p-4 border border-gray-100 shadow-sm transition-all hover:shadow-md">
+            <label className="block text-sm font-medium text-gray-700 mb-3">Tags</label>
             <div className="flex flex-wrap gap-3">
               {TAG_OPTIONS.map((item) => (
-                <label key={item} className="flex items-center gap-2 text-sm">
+                <label key={item} className={`flex items-center gap-2 text-sm px-3 py-2 rounded-full transition-all cursor-pointer ${
+                  tags.includes(item) 
+                    ? 'bg-indigo-100 text-indigo-700 border border-indigo-200' 
+                    : 'bg-gray-50 border border-gray-200 hover:bg-gray-100'
+                }`}>
                   <input
                     type="checkbox"
                     checked={tags.includes(item)}
                     onChange={() => setTags(toggleValue(tags, item))}
+                    className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500"
                   />
-                  {item}
+                  <span className="capitalize">{item}</span>
                 </label>
               ))}
             </div>
@@ -182,7 +200,7 @@ export default function CreateContentPage() {
           {/* Submit */}
           <button
             type="submit"
-            className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md font-semibold hover:bg-indigo-700"
+            className="w-full bg-gradient-to-r from-indigo-600 to-indigo-700 text-white py-3 px-4 rounded-lg font-semibold shadow-md hover:shadow-lg hover:from-indigo-700 hover:to-indigo-800 transition-all"
           >
             Create Content
           </button>
