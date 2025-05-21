@@ -8,6 +8,7 @@ dotenv.config({
 import { Request, Response } from "express";
 import Review from "../models/Review.js";
 import User from "../models/User.js";
+import { AuthenticatedRequest } from "../middleware/authenticateJWT";
 
 export const getWorkpaperReviews = async (
   req: Request,
@@ -39,10 +40,17 @@ export const getWorkpaperReviews = async (
 };
 
 export const createReview = async (
-  req: Request,
+  req: AuthenticatedRequest,
   res: Response
 ): Promise<void> => {
-  const { userId, workpaperId, rating, comment } = req.body;
+  const { workpaperId, rating, comment } = req.body;
+  const userId = req.user?.userId;
+
+  console.log("==== Incoming Review Request ====");
+  console.log("req.user.userId:", userId);
+  console.log("req.body.workpaperId:", workpaperId);
+  console.log("req.body.rating:", rating);
+  console.log("req.body.comment:", comment);
 
   if (
     !userId ||
@@ -71,3 +79,4 @@ export const createReview = async (
     res.status(500).json({ error: err.message });
   }
 };
+
