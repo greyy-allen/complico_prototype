@@ -1,12 +1,11 @@
 'use client';
 
-import React, { useEffect, useState, Suspense, useRef } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import ProductDetails from "../ProductDetails";
 import { Heading } from "@/components/ui";
 import Link from "next/link";
 
-const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL;
-
+const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api";
 
 type Workpaper = {
   workpaperId: string;
@@ -19,39 +18,56 @@ type Workpaper = {
 };
 
 export default function ExploreWorkpapers() {
-  const [data, setData] = useState<Workpaper[]>([]);
+  const [allWorkpapers, setAllWorkpapers] = useState<Workpaper[]>([]);
+  const [subscribedIds, setSubscribedIds] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
 
   const [startIndex, setStartIndex] = useState(0);
-
   const visibleCount = 4;
 
   useEffect(() => {
-    const fetchWorkpapers = async () => {
+    const token = localStorage.getItem("token");
+    const payload = token ? JSON.parse(atob(token.split(".")[1])) : null;
+    const firmId = payload?.firmId;
+
+    const fetchAll = async () => {
       try {
-        const response = await fetch(NEXT_PUBLIC_API_URL + "/workpapers");
-        const result = await response.json();
-        setData(result);
+        const [allWpRes, subWpRes] = await Promise.all([
+          fetch(`${NEXT_PUBLIC_API_URL}/workpapers`),
+          fetch(`${NEXT_PUBLIC_API_URL}/subscriptions/${firmId}`)
+        ]);
+
+        const [allWp, subWp] = await Promise.all([
+          allWpRes.json(),
+          subWpRes.json()
+        ]);
+
+        const subIds = (subWp?.data || []).map((wp: Workpaper) => wp.workpaperId);
+        setAllWorkpapers(allWp);
+        setSubscribedIds(subIds);
       } catch (error) {
-        console.error("Failed to fetch workpapers:", error);
+        console.error("Failed to fetch workpapers or subscriptions:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchWorkpapers();
+    fetchAll();
   }, []);
+
+  const visibleData = allWorkpapers
+    .filter((wp) => !subscribedIds.includes(wp.workpaperId))
+    .slice(startIndex, startIndex + visibleCount);
 
   const scroll = (direction: 'left' | 'right') => {
     if (direction === 'left') {
       setStartIndex((prev) => Math.max(prev - 1, 0));
     } else if (direction === 'right') {
       setStartIndex((prev) =>
-        prev + visibleCount < data.length ? prev + 1 : prev
+        prev + visibleCount < allWorkpapers.length ? prev + 1 : prev
       );
     }
   };
-  const visibleData = data.slice(startIndex, startIndex + visibleCount);
 
   return (
     <div className="flex w-[78%] flex-col items-start gap-5 self-center md:w-full md:px-5">

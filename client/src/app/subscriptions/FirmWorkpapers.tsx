@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, Suspense, useRef } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import ProductDetails from "../../components/ProductDetails";
 import ExploreWorkpapers from "../../components/ExploreWorkpapers";
 import { Heading } from "@/components/ui";
@@ -27,7 +27,7 @@ export default function FirmWorkpapers() {
   useEffect(() => {
     const fetchWorkpapers = async () => {
       try {
-        const response = await fetch(NEXT_PUBLIC_API_URL + "/subscriptions/" + firmId);
+        const response = await fetch(`${NEXT_PUBLIC_API_URL}/subscriptions/${firmId}`);
         const result = await response.json();
         setData(result.data);
       } catch (error) {
@@ -53,9 +53,8 @@ export default function FirmWorkpapers() {
       {loading ? (
         <div>Loading...</div>
       ) : data.length === 0 ? (
-        <div className="text-gray-600 text-lg space-y-8">
-          <div>Firm has not yet subscribed to any workpaper.</div>
-          <ExploreWorkpapers></ExploreWorkpapers>
+        <div className="text-gray-600 text-lg">
+          Firm has not yet subscribed to any workpaper.
         </div>
       ) : (
         <div className="grid grid-cols-3 gap-6">
@@ -74,11 +73,14 @@ export default function FirmWorkpapers() {
                     <>
                       {workpaper.description}
                       <br />
-                      <strong>Region:</strong> {Array.isArray(workpaper.region) ? workpaper.region.join(", ") : "N/A"}
+                      <strong>Region:</strong>{" "}
+                      {Array.isArray(workpaper.region) ? workpaper.region.join(", ") : "N/A"}
                       <br />
-                      <strong>Entity:</strong> {Array.isArray(workpaper.entityType) ? workpaper.entityType.join(", ") : "N/A"}
+                      <strong>Entity:</strong>{" "}
+                      {Array.isArray(workpaper.entityType) ? workpaper.entityType.join(", ") : "N/A"}
                       <br />
-                      <strong>Tags:</strong> {Array.isArray(workpaper.tags) ? workpaper.tags.join(", ") : "N/A"}
+                      <strong>Tags:</strong>{" "}
+                      {Array.isArray(workpaper.tags) ? workpaper.tags.join(", ") : "N/A"}
                     </>
                   }
                   productRating="N/A"
@@ -89,6 +91,9 @@ export default function FirmWorkpapers() {
           </Suspense>
         </div>
       )}
+
+      {/* Always render this, regardless of loading or subscription status */}
+      <ExploreWorkpapers />
     </main>
   );
 }

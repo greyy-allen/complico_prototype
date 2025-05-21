@@ -37,6 +37,36 @@ export default function WorkPaperDetails() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"overview" | "reviews">("overview");
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [showReviewInput, setShowReviewInput] = useState(false);
+  const [newReview, setNewReview] = useState({ rating: 5, comment: "" });
+
+  // For optional UI logic, not used in the POST body
+  const [subscriberId, setSubscriberId] = useState<string | null>(null);
+  const [firmId, setFirmId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      if (!workpaperId) return;
+      try {
+        const response = await fetch(`${NEXT_PUBLIC_API_URL}/reviews/${workpaperId}`);
+        const result = await response.json();
+
+        // Defensive check: make sure result is an array
+        if (Array.isArray(result)) {
+          setReviews(result);
+        } else {
+          console.warn("Unexpected response format for reviews:", result);
+          setReviews([]);
+        }
+      } catch (error) {
+        console.error("Failed to fetch reviews", error);
+        setReviews([]); // fallback to empty
+      }
+    };
+
+    fetchReviews();
+  }, [workpaperId]);
+
 
   useEffect(() => {
     const fetchWorkpaper = async () => {
@@ -57,12 +87,29 @@ export default function WorkPaperDetails() {
   useEffect(() => {
     const fetchReviews = async () => {
       if (!workpaperId) return;
+
+      const token = localStorage.getItem("token");
+
       try {
-        const response = await fetch(`${NEXT_PUBLIC_API_URL}/reviews/${workpaperId}`);
+        const response = await fetch(`${NEXT_PUBLIC_API_URL}/reviews/${workpaperId}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
         const result = await response.json();
-        setReviews(result);
+
+        if (Array.isArray(result)) {
+          setReviews(result);
+        } else {
+          console.warn("Unexpected response format for reviews:", result);
+          setReviews([]);
+        }
       } catch (error) {
         console.error("Failed to fetch reviews", error);
+        setReviews([]);
       }
     };
 
@@ -118,18 +165,87 @@ export default function WorkPaperDetails() {
             <div className="flex items-center justify-between mb-6">
               <Heading as="h2" className="text-2xl font-bold">Join the conversation!</Heading>
               <button
-                onClick={() => alert("Open Add Review Modal")}
+                onClick={() => setShowReviewInput(!showReviewInput)}
                 className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-semibold"
               >
-                + Add Review
+                {showReviewInput ? "Cancel" : "+ Add Review"}
               </button>
             </div>
+
+            {showReviewInput && (
+              <div className="bg-gray-50 p-4 rounded-lg shadow-inner max-w-2xl mx-auto mb-6">
+                <label className="block text-sm font-medium mb-1">Rating (1–5)</label>
+                <input
+                  type="number"
+                  min={1}
+                  max={5}
+                  value={newReview.rating}
+                  onChange={(e) => setNewReview({ ...newReview, rating: Number(e.target.value) })}
+                  className="w-full border px-3 py-2 rounded-md mb-4"
+                />
+
+                <label className="block text-sm font-medium mb-1">Comment</label>
+                <textarea
+                  rows={3}
+                  value={newReview.comment}
+                  onChange={(e) => setNewReview({ ...newReview, comment: e.target.value })}
+                  className="w-full border px-3 py-2 rounded-md mb-4"
+                />
+
+                <div className="flex justify-end">
+                  <button
+                    onClick={async () => {
+                      try {
+                        const token = localStorage.getItem("token");
+                        console.log("Submitting review:", {
+                          token,
+                          workpaperId,
+                          rating: newReview.rating,
+                          comment: newReview.comment,
+                        });
+                        const res = await fetch(`${NEXT_PUBLIC_API_URL}/reviews`, {
+                          method: "POST",
+                          headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${token}`,
+                          },
+                          body: JSON.stringify({
+                            workpaperId,
+                            rating: newReview.rating,
+                            comment: newReview.comment,
+                          }),
+                        });
+
+                        if (!res.ok) throw new Error("Failed to submit review");
+
+                        setNewReview({ rating: 5, comment: "" });
+                        setShowReviewInput(false);
+
+                        const refreshed = await fetch(`${NEXT_PUBLIC_API_URL}/reviews/${workpaperId}`, {
+                          headers: {
+                            Authorization: `Bearer ${token}`,
+                            "Content-Type": "application/json",
+                          },
+                        });
+                        setReviews(await refreshed.json());
+                      } catch (err) {
+                        console.error(err);
+                        alert("Failed to submit review");
+                      }
+                    }}
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm"
+                  >
+                    Submit Review
+                  </button>
+                </div>
+              </div>
+            )}
 
             {reviews.length === 0 && (
               <div className="text-gray-500 text-sm text-center">No reviews yet.</div>
             )}
 
-            {reviews.map((review) => (
+            {Array.isArray(reviews) && reviews.map((review) => (
               <div
                 key={review.reviewId}
                 className="bg-white p-6 rounded-xl shadow-md max-w-2xl mx-auto mb-6 flex flex-col gap-4"
