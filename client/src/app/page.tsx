@@ -117,9 +117,9 @@ export default function BrowseContentPage() {
               </Heading>
 
               <ul className="mt-2 space-y-1 text-[16px] font-medium">
-                <li><Link href="#">Workpapers</Link></li>
-                <li><Link href="#">Accounting</Link></li>
-                <li><Link href="#">Audit</Link></li>
+                <li><Link href="#" className="text-blue-600 no-underline hover:font-bold transition-all">Workpapers</Link></li>
+                <li><Link href="#" className="text-blue-600 no-underline hover:font-bold transition-all">Accounting</Link></li>
+                <li><Link href="#" className="text-blue-600 no-underline hover:font-bold transition-all">Audit</Link></li>
               </ul>
             </section>
 
@@ -129,8 +129,8 @@ export default function BrowseContentPage() {
               </Heading>
 
               <ul className="mt-2 space-y-1 text-[16px] font-medium">
-                <li><Link href="#">Limited-Time</Link></li>
-                <li><Link href="#">On sale</Link></li>
+                <li><Link href="#" className="text-blue-600 no-underline hover:font-bold transition-all">Limited-Time</Link></li>
+                <li><Link href="#" className="text-blue-600 no-underline hover:font-bold transition-all">On sale</Link></li>
               </ul>
             </section>
 
@@ -140,13 +140,13 @@ export default function BrowseContentPage() {
               </Heading>
 
               <ul className="mt-2 space-y-1 text-[16px] font-medium">
-                <li><Link href="#">Accounting</Link></li>
-                <li><Link href="#">Workpaper</Link></li>
-                <li><Link href="#">Audit</Link></li>
-                <li><Link href="#">Statements</Link></li>
-                <li><Link href="#">Superannuation</Link></li>
-                <li><Link href="#">Tax</Link></li>
-                <li><Link href="#">Templates</Link></li>
+                <li><Link href="#" className="text-blue-600 no-underline hover:font-bold transition-all">Accounting</Link></li>
+                <li><Link href="#" className="text-blue-600 no-underline hover:font-bold transition-all">Workpaper</Link></li>
+                <li><Link href="#" className="text-blue-600 no-underline hover:font-bold transition-all">Audit</Link></li>
+                <li><Link href="#" className="text-blue-600 no-underline hover:font-bold transition-all">Statements</Link></li>
+                <li><Link href="#" className="text-blue-600 no-underline hover:font-bold transition-all">Superannuation</Link></li>
+                <li><Link href="#" className="text-blue-600 no-underline hover:font-bold transition-all">Tax</Link></li>
+                <li><Link href="#" className="text-blue-600 no-underline hover:font-bold transition-all">Templates</Link></li>
               </ul>
             </section>
 
