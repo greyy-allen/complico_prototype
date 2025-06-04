@@ -16,7 +16,7 @@ export default function DocumentInformationPage() {
   return (
     <div className="w-full bg-white-a700">
       <div className="mb-9 mt-2.5 flex flex-col items-center">
-        <Header className="relative z-[3] mx-auto w-full max-w-[1400px] gap-5 md:px-5" />
+        <Header />
         <div className="flex flex-col items-center gap-[34px] self-stretch">
           <DocumentinformationPopular />
           <div className="ml-[38px] mr-[84px] flex items-start self-stretch md:mx-0 md:flex-col">
